@@ -1,9 +1,9 @@
-// basket-remote/craco.config.js
+
 const { ModuleFederationPlugin } = require('webpack').container;
 const deps = require('./package.json').dependencies;
 
 module.exports = {
-  // ESLint’i kapatıyoruz:
+
   eslint: {
     enable: false,
   },

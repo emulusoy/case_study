@@ -1,4 +1,4 @@
-// products-remote/src/components/ProductsPage.tsx
+
 import React, { useMemo, useState } from 'react';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
@@ -39,7 +39,6 @@ const labelize = (s: string) =>
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ');
 
-// Placeholder (son çare)
 const PLACEHOLDER =
   "data:image/svg+xml;utf8," +
   encodeURIComponent(
@@ -52,13 +51,12 @@ const PLACEHOLDER =
      </svg>`
   );
 
-// Orijinal FakeStore dosya adına göre GitHub raw fallback üret
 const toGithubRaw = (src: string) => {
   const file = (src || '').split('/').pop() || '';
   return `https://raw.githubusercontent.com/keikaavousi/fake-store-api/master/public/img/${file}`;
 };
 
-const HOST_ORIGIN = 'http://localhost:3000'; // gerekirse değiştir
+const HOST_ORIGIN = 'http://localhost:3000'; 
 
 const ProductsList: React.FC = () => {
   const {
@@ -97,7 +95,7 @@ const ProductsList: React.FC = () => {
     ...categories.map((c) => ({ key: c, label: labelize(c) })),
   ];
 
-  // Modal
+  // sepete ekleme islemi icin
   const showAddedModal = (product: Product) => {
     Modal.success({
       title: 'Sepete eklendi',
@@ -111,12 +109,11 @@ const ProductsList: React.FC = () => {
       centered: true,
     });
   };
-
-  // Add to cart: orijinal URL ile gönder (basket tarafında da onError fallback önerdim)
+  //sepete ekleme fonksiyonu
   const handleAddToCart = (p: Product) => {
     try {
       window.parent.postMessage(
-        { type: 'ADD_TO_CART', item: p }, // image = orijinal URL
+        { type: 'ADD_TO_CART', item: p }, 
         HOST_ORIGIN
       );
     } catch {}
@@ -125,7 +122,6 @@ const ProductsList: React.FC = () => {
 
   return (
     <div style={container}>
-      {/* Başlık + açıklama */}
       <div style={{ marginBottom: 16 }}>
         <Title level={3} style={{ margin: 0 }}>
           {activeTab === 'all' ? 'All Products' : labelize(activeTab)}
@@ -134,8 +130,6 @@ const ProductsList: React.FC = () => {
           Browse categories fetched live from FakeStore API. Pick a tab to filter the grid by category.
         </Paragraph>
       </div>
-
-      {/* Sekmeler */}
       <Tabs
         items={tabs}
         activeKey={activeTab}
@@ -146,7 +140,6 @@ const ProductsList: React.FC = () => {
         style={{ borderBottom: '1px solid #f0f0f0' }}
       />
 
-      {/* İçerik */}
       {loading ? (
         <Row gutter={[24, 24]} style={{ marginTop: 16 }}>
           {Array.from({ length: 6 }).map((_, i) => (
@@ -180,7 +173,6 @@ const ProductsList: React.FC = () => {
                         placeItems: 'center',
                       }}
                     >
-                      {/* ÖNCE orijinal URL; 404 olursa GitHub raw; o da yoksa placeholder */}
                       <img
                         src={String(p.image)}
                         alt={p.title}
@@ -230,8 +222,6 @@ const ProductsList: React.FC = () => {
               </Col>
             ))}
           </Row>
-
-          {/* Load more */}
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
             <Button
               onClick={() => setVisibleCount((c) => c + 6)}

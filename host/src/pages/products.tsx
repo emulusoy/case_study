@@ -1,4 +1,3 @@
-// host/src/pages/products.tsx
 import React, { useEffect, useRef } from 'react';
 import Nav from '../components/Nav';
 

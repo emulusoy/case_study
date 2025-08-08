@@ -1,4 +1,3 @@
-// products-remote/src/app/store.ts
 import { configureStore } from '@reduxjs/toolkit';
 import { productsApi } from '../redux/services/products';
 

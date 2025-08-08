@@ -1,4 +1,3 @@
-// basket-remote/src/components/BasketListPage.tsx
 import React from 'react';
 
 export interface Product {
@@ -8,10 +7,9 @@ export interface Product {
   image: string;
 }
 
-const STORAGE_KEY = 'mf-cart';            // Host ile aynı olmalı
-const HOST_ORIGIN = 'http://localhost:3000'; // Host originini buraya yaz
+const STORAGE_KEY = 'mf-cart';          
+const HOST_ORIGIN = 'http://localhost:3000'; 
 
-// Görsel fallback: orijinal → GitHub raw → placeholder
 const PLACEHOLDER =
   "data:image/svg+xml;utf8," +
   encodeURIComponent(
@@ -39,7 +37,6 @@ function writeCart(items: Product[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 }
 
-// Aynı id'li ürünleri grupla
 function groupByProduct(items: Product[]) {
   const map = new Map<number, { product: Product; qty: number }>();
   items.forEach((p) => {
@@ -75,14 +72,12 @@ const qtyWrap: React.CSSProperties = {
 const BasketListPage: React.FC = () => {
   const [items, setItems] = React.useState<Product[]>([]);
 
-  // Host'a mevcut sepeti sor (cross-origin senkron)
   const requestCartFromHost = React.useCallback(() => {
     try {
       window.parent.postMessage({ type: 'REQUEST_CART' }, HOST_ORIGIN);
     } catch {}
   }, []);
 
-  // State + localStorage güncelle ve host'a opsiyonel yayın yap
   const update = (next: Product[], notifyHost = true) => {
     setItems(next);
     writeCart(next);
@@ -93,27 +88,22 @@ const BasketListPage: React.FC = () => {
     }
   };
 
-  // İlk yükleme: localStorage oku + host'tan iste + dinleyiciler
   React.useEffect(() => {
     setItems(readCart());
 
-    // storage event (aynı origin içinde başka tab/iframe değişimi)
     const onStorage = (e: StorageEvent) => {
       if (e.key === STORAGE_KEY) setItems(readCart());
     };
     window.addEventListener('storage', onStorage);
 
-    // host mesajları
     const onMessage = (e: MessageEvent) => {
       const { type, items: incoming } = e.data || {};
       if (type === 'CART_STATE' && Array.isArray(incoming)) {
-        // host sepetini içeri al
-        update(incoming, /*notifyHost*/ false);
+        update(incoming, false);
       }
     };
     window.addEventListener('message', onMessage);
 
-    // host'tan iste
     requestCartFromHost();
 
     return () => {
@@ -195,8 +185,6 @@ const BasketListPage: React.FC = () => {
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 4, fontSize: 13 }}>
                     <span style={{ color: '#28a745' }}>✔ In stock</span>
-
-                    {/* Qty kontrolü */}
                     <div style={qtyWrap}>
                       <button
                         type="button"
@@ -218,8 +206,6 @@ const BasketListPage: React.FC = () => {
                         +
                       </button>
                     </div>
-
-                    {/* Satırı komple kaldır */}
                     <a
                       href="#"
                       onClick={(e) => { e.preventDefault(); removeLine(p); }}

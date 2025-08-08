@@ -1,4 +1,3 @@
-// products-remote/src/pages/index.tsx
 import React from 'react';
 import ProductsPage from '../components/ProductsPage';
 

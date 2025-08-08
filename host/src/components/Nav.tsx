@@ -1,4 +1,3 @@
-// host/src/components/Nav.tsx
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
@@ -23,7 +22,7 @@ import { useRouter } from 'next/router';
 const { Header } = Layout;
 const { useBreakpoint } = Grid;
 
-const STORAGE_KEY = 'mf-cart'; // basket/products ile aynı olmalı
+const STORAGE_KEY = 'mf-cart';
 
 const items = [
   { key: 'products', label: 'Products' },
@@ -51,9 +50,9 @@ export default function Navbar({ onSignIn, onSignUp }: Props) {
   const [showBanner, setShowBanner] = useState(true);
   const [open, setOpen] = useState(false);
   const screens = useBreakpoint();
-  const isMobile = !screens.md; // md altı: mobil
+  const isMobile = !screens.md; // md altı: mobil icindir
 
-  // Cart badge
+
   const [cartCount, setCartCount] = useState(0);
   useEffect(() => {
     setCartCount(readCartCount());
@@ -100,7 +99,6 @@ export default function Navbar({ onSignIn, onSignUp }: Props) {
     };
   }, []);
 
-  // Menü seçili anahtarları yol’a göre ayarla
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   useEffect(() => {
     const path = router.pathname;
@@ -112,7 +110,7 @@ export default function Navbar({ onSignIn, onSignUp }: Props) {
     setSelectedKeys(key ? [key] : []);
   }, [router.pathname]);
 
-  // Menü tıklama → yönlendirme
+  // local3000/products gider 3001 portu calisir!
   const handleMenuClick = (e: { key: string }) => {
     switch (e.key) {
       case 'products':
@@ -216,10 +214,8 @@ export default function Navbar({ onSignIn, onSignUp }: Props) {
           }}
         >
           <div style={containerStyle}>
-            {/* Sol: logo (anasayfa) */}
             {Logo}
 
-            {/* Sağ: Masaüstü */}
             {!isMobile ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
                 <Menu
@@ -240,7 +236,6 @@ export default function Navbar({ onSignIn, onSignUp }: Props) {
                 </Space>
               </div>
             ) : (
-              // Mobil: sepet + hamburger
               <Space size="small">
                 {CartButton}
                 <Button
@@ -254,8 +249,7 @@ export default function Navbar({ onSignIn, onSignUp }: Props) {
             )}
           </div>
         </Header>
-
-        {/* Mobil Drawer */}
+          {/* mobil acilan menu */}
         <Drawer
           placement="top"
           open={open}
@@ -264,7 +258,7 @@ export default function Navbar({ onSignIn, onSignUp }: Props) {
           height="100vh"
           bodyStyle={{ padding: 0, display: 'flex', flexDirection: 'column' }}
         >
-          {/* Drawer üst barı (logo + sepet + kapat) */}
+
           <div style={containerStyle}>
             {Logo}
             <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -286,7 +280,7 @@ export default function Navbar({ onSignIn, onSignUp }: Props) {
             </div>
           </div>
 
-          {/* Menü listesi (mobil) */}
+          {/* mobil */}
           <div style={{ padding: '8px 8px 0' }}>
             <Menu
               mode="inline"
@@ -297,7 +291,6 @@ export default function Navbar({ onSignIn, onSignUp }: Props) {
             />
           </div>
 
-          {/* CTA alt sabit alan */}
           <div
             style={{
               marginTop: 'auto',

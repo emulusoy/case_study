@@ -72,8 +72,6 @@ export default function HomePage() {
     <Layout style={{ background: '#fff' }}>
       <Nav/>
       <Content>
-
-        {/* HERO SLIDER */}
         <div style={{ ...container, paddingTop: 24 }}>
           <Carousel autoplay arrows prevArrow={<LeftOutlined />} nextArrow={<RightOutlined />} style={{ borderRadius: 12, overflow: 'hidden' }}>
             {sliderImages.map((src, i) => (
@@ -90,8 +88,6 @@ export default function HomePage() {
             ))}
           </Carousel>
         </div>
-
-        {/* PRODUCTS - butonlarla kayan */}
         <section style={container}>
           <div
             style={{
@@ -106,7 +102,6 @@ export default function HomePage() {
           </div>
 
           <div style={{ position: 'relative' }}>
-            {/* Sağ & sol butonlar */}
             <Button
               shape="circle"
               aria-label="Previous products"

@@ -54,7 +54,7 @@ const readCart = (): Product[] => {
 const writeCart = (items: Product[]) =>
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 
-/** Aynı id'li ürünleri qty ile grupla */
+/** ayni urunden olanlar */
 function groupByProduct(items: Product[]) {
   const map = new Map<number, { product: Product; qty: number }>();
   items.forEach((p) => {
@@ -79,12 +79,9 @@ const BasketListPage: React.FC = () => {
     }
   }, []);
 
-  // İlk yükleme
   React.useEffect(() => {
     setItems(readCart());
   }, []);
-
-  // Host mesajları (INIT_CART / CART_STATE / ADD_TO_CART)
   React.useEffect(() => {
     const onMessage = (e: MessageEvent) => {
       const { type, items: incoming, item } = e.data || {};
@@ -98,8 +95,6 @@ const BasketListPage: React.FC = () => {
     window.addEventListener('message', onMessage);
     return () => window.removeEventListener('message', onMessage);
   }, [update]);
-
-  // Aynı origin’de başka sekme/iframe güncellerse dinle
   React.useEffect(() => {
     const onStorage = (e: StorageEvent) => {
       if (e.key === STORAGE_KEY) setItems(readCart());
@@ -124,8 +119,6 @@ const BasketListPage: React.FC = () => {
     }
   };
   const removeLine = (p: Product) => update(items.filter((x) => x.id !== p.id));
-
-  // Görsel (AntD yerine düz img — AntD Image bazı CDN’lerde sıkıntı çıkarıyordu)
   const ProductImage: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
     const size = screens.xs ? 120 : 96;
     return (

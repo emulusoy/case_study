@@ -1,4 +1,3 @@
-// products-remote/next.config.js
 const { NextFederationPlugin } = require('@module-federation/nextjs-mf');
 const path = require('path');
 
