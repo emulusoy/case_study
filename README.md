@@ -1,60 +1,43 @@
-Micro-Frontend Case Study
+ Micro-Frontend Case Study
 Host (Next.js) + Products Remote (Next.js) + Basket Remote (CRA + Ant Design)
 
 Bu repo; tek bir monorepo altında üç uygulamadan oluşan bir micro-frontend örneğidir:
 
 Host – Next.js (port 3000)
+– /products sayfasında Products Remote (3001)
+– /basket sayfasında Basket Remote (3002)
 
-/products sayfasında Products Remote (3001) iframe
+Products Remote – Next.js (port 3001) – Fakestore API’den ürün listeler, sepete ekle eventi gönderir
 
-/basket sayfasında Basket Remote (3002) iframe
-
-Products Remote – Next.js (port 3001)
-Fakestore API’den ürün listeler, sepete ekle eventi gönderir.
-
-Basket Remote – CRA + TypeScript + Ant Design (port 3002)
-Host’tan aldığı mesajlarla tam sayfa sepeti gösterir.
+Basket Remote – CRA + TypeScript + Ant Design (port 3002) – Host’tan aldığı mesajlarla tam sayfa sepeti gösterir
 
 Mikro-frontend iletişimi iframe + window.postMessage ile yapılır (basit, framework bağımsız ve stabil).
 
 Önkoşullar
 Node.js 18+ (öneri: 20 LTS)
-
 npm 9+
-
 Git
-
-(Opsiyonel) Docker Desktop
-
-Windows’ta satır sonu sorunlarını önlemek için:
+Windows’ta CRLF/LF karmaşası yaşamamak için:
 git config --global core.autocrlf true
 
-Proje Yapısı
-txt
-Kopyala
-Düzenle
 micro-frontend-project/
+
 ├── host/                 # Next.js (3000) – iframe sayfaları ve mesaj köprüsü
+
 ├── products-remote/      # Next.js (3001) – Fakestore API, "Sepete Ekle"
+
 ├── basket-remote/        # CRA + TS + Ant Design (3002) – tam sayfa sepet
+
 ├── package.json          # npm workspaces
+
 ├── package-lock.json
+
 └── .gitignore
-Kurulum
-Kök dizinden bağımlılıkları kurun:
 
-bash
-Kopyala
-Düzenle
-npm install
-(İsteğe bağlı) basket-remote/.env içine portu sabitleyin:
 
-ini
-Kopyala
-Düzenle
-PORT=3002
+
 Çalıştırma Adımları
-Üç terminal (veya tmux/panes) açın ve sırayla:
+Aşağıdaki üç komutu ayrı terminallerde çalıştır:
 
 bash
 Kopyala
@@ -67,46 +50,17 @@ npm run dev --workspace products-remote
 
 # Basket Remote (CRA + AntD, 3002)
 npm run start --workspace basket-remote
+
 Sonra tarayıcıda:
 
 Host: http://localhost:3000
+– /products → 3001’deki Products Remote’u iframe ile gösterir
+– /basket → 3002’deki Basket Remote’u iframe ile gösterir
 
-/products → 3001’deki Products Remote’u iframe ile gösterir
 
-/basket → 3002’deki Basket Remote’u iframe ile gösterir
 
-İletişim Mimarisi (postMessage)
-Products → Host:
-“Sepete Ekle” tıklanınca:
-
-ts
-Kopyala
-Düzenle
-window.parent.postMessage({ type: 'ADD_TO_CART', item }, '*');
-Host (/products):
-ADD_TO_CART mesajını dinler, ürünü localStorage('mf-cart') içine ekler.
-
-Host (/basket):
-
-Iframe yüklendiğinde:
-
-ts
-Kopyala
-Düzenle
-postMessage({ type: 'INIT_CART', items: JSON.parse(localStorage.getItem('mf-cart') || '[]') }, '*');
-Yeni ürün eklenirse:
-
-ts
-Kopyala
-Düzenle
-postMessage({ type: 'ADD_TO_CART', item }, '*');
-Basket Remote (App.tsx):
-INIT_CART ve ADD_TO_CART mesajlarını dinleyip state’i günceller; Ant Design ile sepeti listeler.
-
-Güvenlik: Geliştirmede '*' kullanıldı. Prod ortamında explicit origin verin (örn. https://example.com).
-
-Script’ler
-Kök (workspaces)
+cript’ler
+Kök (workspaces kullanımı)
 bash
 Kopyala
 Düzenle
@@ -132,7 +86,7 @@ start: react-scripts start (CRACO kullanıyorsanız craco start)
 
 build: react-scripts build
 
-Not: Tüm uygulamalarda React 18.2.0 kullanılacak şekilde ayarlanmıştır.
+React sürümü tüm uygulamalarda 18.2.0 olarak sabittir.
 
 Ortam Değişkenleri
 basket-remote/.env
@@ -141,7 +95,7 @@ ini
 Kopyala
 Düzenle
 PORT=3002
-(Opsiyonel) products-remote/.env.local
+(Opsiyonel) Fakestore API için bir base URL gerekiyorsa products-remote’a .env.local ekleyin:
 
 ini
 Kopyala
@@ -155,10 +109,6 @@ Prod Branch: prod/v1.0.0 (test’ten merge edilir)
 Tag: v1.0.0
 
 Örnek akış:
-
-bash
-Kopyala
-Düzenle
 # ilk yükleme
 git switch -c test/v1.0.0
 git push -u origin test/v1.0.0
@@ -170,5 +120,4 @@ git push -u origin prod/v1.0.0
 # release etiketi
 git tag -a v1.0.0 -m "release v1.0.0"
 git push origin v1.0.0
-GitHub → Settings → Branches altında prod/* için Branch protection (PR review, status checks vb.) tanımlamanız önerilir.
-
+GitHub → Settings → Branches’ta prod/* için Branch protection kuralı tanımlayın (PR review, status checks vb.).
