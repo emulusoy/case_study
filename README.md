@@ -1,4 +1,14 @@
+
+ 
+
+Uploading localhost_3000 - Opera 2025-08-08 14-53-54.mp4…
+
+
+ 
  Micro-Frontend Case Study
+
+
+
 Host (Next.js) + Products Remote (Next.js) + Basket Remote (CRA + Ant Design)
 
 Bu repo; tek bir monorepo altında üç uygulamadan oluşan bir micro-frontend örneğidir:
