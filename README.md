@@ -26,12 +26,19 @@ Windows’ta CRLF/LF karmaşası yaşamamak için:
 git config --global core.autocrlf true
 
 micro-frontend-project/
-|-- host/                 # Next.js (3000) – iframe sayfaları ve mesaj köprüsü
-|-- products-remote/      # Next.js (3001) – Fakestore API, "Sepete Ekle"
-|-- basket-remote/        # CRA + TS + Ant Design (3002) – tam sayfa sepet
-|-- package.json          # npm workspaces
-|-- package-lock.json
-`-- .gitignore
+
+├── host/                 # Next.js (3000) – iframe sayfaları ve mesaj köprüsü
+
+├── products-remote/      # Next.js (3001) – Fakestore API, "Sepete Ekle"
+
+├── basket-remote/        # CRA + TS + Ant Design (3002) – tam sayfa sepet
+
+├── package.json          # npm workspaces
+
+├── package-lock.json
+
+└── .gitignore
+
 
 
 Çalıştırma Adımları
